@@ -1,0 +1,174 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+Expense Tracker
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}" />
+{% endblock %}
+
+{% block body %}
+<div id="container">
+    
+    <div class="summary-wrapper">
+        <h1 id='title' class="title">Dashboard</h1>
+        <div class='date-range'>
+            <span>Start: <input id="start-date" type="date" /></span>
+            <span>End: <input id="end-date" type="date" /></span>
+            <button id="submit-btn" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="summary row">
+            {{ summary|json_script:"summary" }}
+            <div class="summary-child col-2"></div>
+            <div class="summary-child col-3">
+                <p>
+                    <span class="summary-label">Total Income: </span><span id="total-income-amt" class="summary-value gain">0</span>
+                </p>
+                <p>
+                    <span class="summary-label">Times Income Made: </span><span id="total-income-made" class="summary-value">0</span>
+                </p>
+            </div>
+            <div class="summary-child col-3">
+                <p>
+                    <span class="summary-label">Total Expense: </span><span id="total-expense-amt" class="summary-value loss">0</span>
+                </p>
+                <p>
+                    <span class="summary-label">Times Purchases Made: </span><span id="total-expense-made" class="summary-value">0</span>
+                </p>
+                <p>
+                    <span class="summary-label">Net Profit / Loss: </span><span id="total-profit-amt" class="summary-value">0</span>
+                </p>
+            </div>
+            <div class="summary-child col-3">
+                <p>
+                    <span class="summary-label">Max Purchased Source: </span><span id="max-purchased-source" class="summary-value"></span>
+                </p>
+                <p>
+                    <span class="summary-label">Max Income Source: </span><span id="max-income-source" class="summary-value"></span>
+                </p>
+            </div>
+            <div class="summary-child col-2"></div>
+        </div>
+    </div>
+
+    <div class="chart-container row">
+        {{ monthly_expense|json_script:"monthly_expense" }}
+        <div id="expense-bar-chart" class="chart col-sm-12 col-md-6">
+            <p id="expense-bar-chart-error" class="chart-error">No data to show.</p>
+        </div>
+    
+        {{ monthly_income|json_script:"monthly_income" }}
+        <div id="income-bar-chart" class="chart col-sm-12 col-md-6">
+            <p id="income-bar-chart-error" class="chart-error">No data to show.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+
+<!-- Bar Chart -->
+<script src="{%  static 'js/bar-chart/index.js' %}" type="module"></script>
+<script src="{%  static 'js/bar-chart/axisBottom.js' %}" type="module"></script>
+<script src="{%  static 'js/bar-chart/axisLeft.js' %}" type="module"></script>
+<script src="{%  static 'js/bar-chart/marks.js' %}" type="module"></script>
+
+<!-- Summary -->
+<script type="module">
+    // Summary
+    const summary_data = JSON.parse(document.getElementById('summary').textContent);
+    document.getElementById('total-income-amt').innerText = '$' + `${summary_data['total_income'] ? summary_data['total_income'] : 0}`
+    document.getElementById('total-income-made').innerText = summary_data['income_count']
+    document.getElementById('total-expense-amt').innerText = "$" + `${summary_data['total_expense'] ? summary_data['total_expense'] : 0}`
+    document.getElementById('total-expense-made').innerText = summary_data['expense_count']
+
+    console.log('summary_data - max_expense:', summary_data['max_expense']);
+    const { count: eCount, items: eItems } = summary_data['max_expense'];
+    const eItems_str = eItems.join(', ');
+    document.getElementById('max-purchased-source').innerText = `${eCount} ${eCount > 1 ? "times" : "time"} (${eItems_str ? eItems_str : ''})`;
+
+    const { count: iCount, items: iItems } = summary_data['max_income'];
+    const iItems_str = iItems.join(', ');
+    document.getElementById('max-income-source').innerText = `${iCount} ${iCount > 1 ? "times" : "time"}  (${iItems_str ? iItems_str : ''})`;
+
+    const difference = summary_data['total_income'] - summary_data['total_expense'];
+    if (difference < 0) {
+        document.getElementById('total-profit-amt').classList.remove('gain');
+        document.getElementById('total-profit-amt').classList.add('loss');
+        document.getElementById('total-profit-amt').innerText = difference.toString().replace('-', '- $');
+    } else {
+        document.getElementById('total-profit-amt').classList.remove('loss');
+        document.getElementById('total-profit-amt').classList.add('gain');
+        document.getElementById('total-profit-amt').innerText = "+ $" + difference;
+    }
+</script>
+
+<!-- Date Range -->
+<script type="module">
+    // Date Range
+    const urlParams = new URLSearchParams(window.location.search);
+    let start_date = urlParams.get('start_date');
+    let end_date = urlParams.get('end_date');
+
+    if (start_date && end_date) {
+        start_date = moment(start_date).format('DD MMM, YY');
+        end_date = moment(end_date).format('DD MMM, YY');
+        document.getElementById('title').innerText = `Dashboard (${start_date} - ${end_date})`;
+    } else {
+        document.getElementById('title').innerText = 'Dashboard';
+    }
+
+    document.getElementById('submit-btn').addEventListener('click', 
+        (e) => {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+
+            if (new Date(endDate) < new Date(startDate)) {
+                alert('Selected end date must be later than start date!');
+                return;
+            }
+
+            window.location.replace(`/dashboard?start_date=${startDate}&&end_date=${endDate}`);
+        });
+</script>
+
+<!-- Monthly Expense -->
+<script type="module">
+    import { BarChart } from "/static/js/bar-chart/index.js";
+
+    const expense_data = JSON.parse(document.getElementById('monthly_expense').textContent);
+    document.getElementById('expense-bar-chart').innerHTML = "";
+    if (expense_data.length > 0) {
+        BarChart(
+            expense_data, "#expense-bar-chart",
+            (window.innerWidth / 2) - 50, 400,
+            "totalExpense", "expenseTypeName", "Expense"
+        );
+    } else {
+        document.getElementById('expense-bar-chart').innerHTML = "<p class='chart-error'>No data to show for monthly expense.</p>";
+    }
+</script>
+
+<!-- Monthly Income -->
+<script type="module">
+    import { BarChart } from "/static/js/bar-chart/index.js";
+
+    const income_data = JSON.parse(document.getElementById('monthly_income').textContent);
+    document.getElementById('income-bar-chart').innerHTML = "";
+    if (income_data.length > 0) {
+        BarChart(
+            income_data, "#income-bar-chart",
+            (window.innerWidth / 2) - 50, 400,
+            "totalIncome", "incomeTypeName", "Income"
+        );
+    } else {
+        document.getElementById('income-bar-chart').innerHTML = "<p class='chart-error'>No data to show for monthly income.</p>";
+    }
+</script>
+{% endblock %}
+

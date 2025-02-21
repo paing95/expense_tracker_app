@@ -1,0 +1,105 @@
+.bar-chart .tick line {
+    stroke: #C0C0BB;
+}
+
+.bar-chart .tick text {
+    fill: #635F5D;
+}
+
+#expense-bar-chart .bar-chart .mark {
+    fill: #BD2D28;
+}
+
+#income-bar-chart .bar-chart .mark {
+    fill: #137B80;
+}
+
+.bar-chart .axis-label {
+    font-size: 2em;
+    fill: #635F5D;
+}
+
+.bar-chart .tooltip {
+    width: 50px;
+    height: 30px;
+    background-color: #635F5D;
+    position: absolute;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.container {
+    display: flex;
+    flex-flow: row;
+}
+
+.chart-container {
+    margin-top: 1em;
+}
+
+.chart {
+    /* display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%; */
+}
+
+.date-range {
+    display: flex;
+    flex-flow: row;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.title {
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+.hide {
+    display: none;
+}
+
+.chart-error {
+    font-size: 1.5em;
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.summary {
+}
+
+.summary-wrapper {
+    background-color: #E5E2E0;
+    padding: 1em;
+}
+
+.summary-title {
+    padding-bottom: 1em;
+    text-align: center;
+}
+
+.summary-label {
+    font-weight: 600;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.loss {
+    color: #BD2D28;
+}
+
+.gain {
+    color: #0F8C79;
+}
+
+.summary-value {
+    font-weight: 500;
+}

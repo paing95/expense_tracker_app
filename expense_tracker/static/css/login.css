@@ -1,0 +1,41 @@
+.content {
+    height: calc(100vh - 56px);
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.login-form {
+    background-color: #ddd;
+    border-radius: 25px;
+    font-weight: bold;
+    margin: 0 auto;
+    min-width: 400px;
+    opacity: 0.95;
+    padding: 2em;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.login-form form {
+    width: 100%;
+}
+
+.login-btn {
+    margin-left: 40%;
+}
+
+.login-title, .signup-text { 
+    text-align: center;
+}
+
+.login-title { 
+    margin-bottom: 1em;
+}
+
+.messages {
+    color: red;
+}
