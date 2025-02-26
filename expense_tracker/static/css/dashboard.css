@@ -14,7 +14,7 @@
     fill: #137B80;
 }
 
-.bar-chart .axis-label {
+.bar-chart .axis-label, .pie-chart .axis-label {
     font-size: 2em;
     fill: #635F5D;
 }
@@ -102,4 +102,8 @@
 
 .summary-value {
     font-weight: 500;
+}
+
+#expense_source_list {
+    margin-left: 2em;
 }

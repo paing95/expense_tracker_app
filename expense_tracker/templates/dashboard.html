@@ -63,6 +63,24 @@ Expense Tracker
         <div id="income-bar-chart" class="chart col-sm-12 col-md-6">
             <p id="income-bar-chart-error" class="chart-error">No data to show.</p>
         </div>
+
+        {{ monthly_expense_source|json_script:"monthly_expense_source" }}
+        <div class="chart col-sm-12 col-md-6">
+            <select id="expense_source_list">
+            </select>
+            <div id="expense-pie-chart">
+                <p id="expense-pie-chart-error" class="chart-error">No data to show.</p>
+            </div>
+        </div>
+
+        {{ monthly_income_source|json_script:"monthly_income_source" }}
+        <div class="chart col-sm-12 col-md-6">
+            <select id="income_source_list">
+            </select>
+            <div id="income-pie-chart">
+                <p id="income-pie-chart-error" class="chart-error">No data to show.</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -78,6 +96,10 @@ Expense Tracker
 <script src="{%  static 'js/bar-chart/axisLeft.js' %}" type="module"></script>
 <script src="{%  static 'js/bar-chart/marks.js' %}" type="module"></script>
 
+<!-- Pie Chart -->
+<script src="{%  static 'js/pie-chart/index.js' %}" type="module"></script>
+<script src="{%  static 'js/pie-chart/arcs.js' %}" type="module"></script>
+
 <!-- Summary -->
 <script type="module">
     // Summary
@@ -87,7 +109,6 @@ Expense Tracker
     document.getElementById('total-expense-amt').innerText = "$" + `${summary_data['total_expense'] ? summary_data['total_expense'] : 0}`
     document.getElementById('total-expense-made').innerText = summary_data['expense_count']
 
-    console.log('summary_data - max_expense:', summary_data['max_expense']);
     const { count: eCount, items: eItems } = summary_data['max_expense'];
     const eItems_str = eItems.join(', ');
     document.getElementById('max-purchased-source').innerText = `${eCount} ${eCount > 1 ? "times" : "time"} (${eItems_str ? eItems_str : ''})`;
@@ -151,6 +172,78 @@ Expense Tracker
         );
     } else {
         document.getElementById('expense-bar-chart').innerHTML = "<p class='chart-error'>No data to show for monthly expense.</p>";
+    }
+</script>
+
+<!-- Monthly Expense By Source -->
+<script type="module">
+    import { PieChart } from "/static/js/pie-chart/index.js";
+
+    const expense_data_by_source = JSON.parse(document.getElementById('monthly_expense_source').textContent);
+    document.getElementById('expense-pie-chart').innerHTML = "";
+    if (Object.keys(expense_data_by_source).length > 0) {
+        document.getElementById('expense_source_list').classList.remove('hide');
+        const sourceKeys = Object.keys(expense_data_by_source);
+        const sourceOptionElement = document.getElementById('expense_source_list');
+        sourceKeys.forEach(key => {
+            const option = document.createElement("option");
+            option.text = key;
+            option.value = key;
+            sourceOptionElement.appendChild(option);
+        });
+        sourceOptionElement.addEventListener('change', (e) => {
+            document.getElementById('expense-pie-chart').innerHTML = "";
+            PieChart(
+                expense_data_by_source[e.target.value], "#expense-pie-chart",
+                (window.innerWidth / 2) - 50, 400,
+                Object.keys(expense_data_by_source[e.target.value]), "Expense Details"
+            );
+        })
+
+        PieChart(
+            expense_data_by_source[sourceKeys[0]], "#expense-pie-chart",
+            (window.innerWidth / 2) - 50, 400,
+            Object.keys(expense_data_by_source[sourceKeys[0]]), "Expense Details"
+        );
+    } else {
+        document.getElementById('expense_source_list').classList.add('hide');
+        document.getElementById('expense-pie-chart').innerHTML = "<p class='chart-error'>No data to show for monthly expense by source.</p>";
+    }
+</script>
+
+<!-- Monthly Income By Source -->
+<script type="module">
+    import { PieChart } from "/static/js/pie-chart/index.js";
+
+    const income_data_by_source = JSON.parse(document.getElementById('monthly_income_source').textContent);
+    document.getElementById('income-pie-chart').innerHTML = "";
+    if (Object.keys(income_data_by_source).length > 0) {
+        document.getElementById('income_source_list').classList.remove('hide');
+        const sourceKeys = Object.keys(income_data_by_source);
+        const sourceOptionElement = document.getElementById('income_source_list');
+        sourceKeys.forEach(key => {
+            const option = document.createElement("option");
+            option.text = key;
+            option.value = key;
+            sourceOptionElement.appendChild(option);
+        });
+        sourceOptionElement.addEventListener('change', (e) => {
+            document.getElementById('income-pie-chart').innerHTML = "";
+            PieChart(
+                income_data_by_source[e.target.value], "#income-pie-chart",
+                (window.innerWidth / 2) - 50, 400,
+                Object.keys(income_data_by_source[e.target.value]), "Income Details"
+            );
+        })
+
+        PieChart(
+            income_data_by_source[sourceKeys[0]], "#income-pie-chart",
+            (window.innerWidth / 2) - 50, 400,
+            Object.keys(income_data_by_source[sourceKeys[0]]), "Income Details"
+        );
+    } else {
+        document.getElementById('income_source_list').classList.add('hide');
+        document.getElementById('income-pie-chart').innerHTML = "<p class='chart-error'>No data to show for monthly income by source.</p>";
     }
 </script>
 
