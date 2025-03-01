@@ -1,4 +1,6 @@
 from django.contrib import admin
+from import_export.admin import ExportActionModelAdmin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from .models import Income, IncomeType
 from .models import Expense, ExpenseType
@@ -16,9 +18,12 @@ class IncomeTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Income)
-class IncomeAdmin(admin.ModelAdmin):
+class IncomeAdmin(ExportActionModelAdmin):
     list_display = ('received_date', 'income_type__name', 'source__name', 'amount',)
     ordering = ('-received_date', 'income_type__name',)
+    list_filter = (
+        ('received_date', DateRangeFilterBuilder()),
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -48,10 +53,13 @@ class ExpenseTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Expense)
-class ExpenseAdmin(admin.ModelAdmin):
+class ExpenseAdmin(ExportActionModelAdmin):
     list_display = ('purchased_date', 'expense_type__name', 'source__name', 'amount',)
     ordering = ('-purchased_date', 'expense_type__name',)
     fields = ('expense_type', 'amount', 'source', 'description', 'purchased_date',)
+    list_filter = (
+        ('purchased_date', DateRangeFilterBuilder()),
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

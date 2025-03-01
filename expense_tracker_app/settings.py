@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rangefilter',
+    'import_export',
     'expense_tracker',
 ]
 
