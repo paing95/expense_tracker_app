@@ -38,9 +38,10 @@ def get_monthly_expense_details(startDate, endDate):
             object_dict[obj["expense_type__name"]] = {}
 
         if obj["source__name"] in object_dict[obj["expense_type__name"]]:
-            object_dict[obj["expense_type__name"]][obj["source__name"]] += obj["amount"]
+            object_dict[obj["expense_type__name"]][obj["source__name"]] = round(object_dict[obj["expense_type__name"]][obj["source__name"]] + obj["amount"], 2)
         else:
-            object_dict[obj["expense_type__name"]][obj["source__name"]] = obj["amount"]
+            object_dict[obj["expense_type__name"]][obj["source__name"]] = round(obj["amount"], 2)
+    
     return object_dict
 
 
@@ -57,9 +58,12 @@ def get_monthly_income_details(startDate, endDate):
             object_dict[obj["income_type__name"]] = {}
 
         if obj["source__name"] in object_dict[obj["income_type__name"]]:
-            object_dict[obj["income_type__name"]][obj["source__name"]] += obj["amount"]
+            object_dict[obj["income_type__name"]][obj["source__name"]] = round(object_dict[obj["income_type__name"]][obj["source__name"]] + obj["amount"], 2)
         else:
-            object_dict[obj["income_type__name"]][obj["source__name"]] = obj["amount"]
+            object_dict[obj["income_type__name"]][obj["source__name"]] = round(obj["amount"], 2)
+        
+    
+    print("object_dict:", object_dict)
     return object_dict
 
 
@@ -109,9 +113,9 @@ def get_monthly_summary(startDate, endDate):
         max_income_source_count = mis["countOfSource"]
 
     return {
-        "total_expense": total_expense["amount__sum"],
+        "total_expense": round(total_expense["amount__sum"], 2) if total_expense["amount__sum"] else total_expense["amount__sum"],
         "expense_count": total_expense["id__count"],
-        "total_income": total_income["amount__sum"],
+        "total_income": round(total_income["amount__sum"], 2) if total_income["amount__sum"] else total_income["amount__sum"],
         "income_count": total_income["id__count"],
         "max_expense": {
             "count": max_expense_source_count,

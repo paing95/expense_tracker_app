@@ -1,109 +1,152 @@
 .bar-chart .tick line {
-    stroke: #C0C0BB;
+  stroke: #c0c0bb;
 }
 
 .bar-chart .tick text {
-    fill: #635F5D;
+  fill: #635f5d;
+  font-size: 12px;
+}
+
+.pie-chart .tick text {
+  font-size: 12px;
 }
 
 #expense-bar-chart .bar-chart .mark {
-    fill: #BD2D28;
+  fill: #bd2d28;
 }
 
 #income-bar-chart .bar-chart .mark {
-    fill: #137B80;
+  fill: #137b80;
 }
 
-.bar-chart .axis-label, .pie-chart .axis-label {
-    font-size: 2em;
-    fill: #635F5D;
+.bar-chart .axis-label,
+.pie-chart .axis-label {
+  font-size: 1.5em;
+  fill: #635f5d;
 }
 
 .bar-chart .tooltip {
-    width: 50px;
-    height: 30px;
-    background-color: #635F5D;
-    position: absolute;
-    text-align: center;
-    border-radius: 5px;
+  width: 50px;
+  height: 30px;
+  background-color: #635f5d;
+  position: absolute;
+  text-align: center;
+  border-radius: 5px;
 }
 
 .container {
-    display: flex;
-    flex-flow: row;
 }
 
 .chart-container {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
 .chart {
-    /* display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-    width: 50%; */
+  padding: 0.5em;
+  border: 0.1px solid #eee;
 }
 
 .date-range {
-    display: flex;
-    flex-flow: row;
-    gap: 1em;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2em;
-    margin-bottom: 2em;
+  display: flex;
+  flex-flow: row;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .title {
-    text-align: center;
-    margin-top: 0.5em;
+  text-align: center;
+  margin-top: 0.5em;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .chart-error {
-    font-size: 1.5em;
-    text-align: center;
-    padding-top: 2em;
-    padding-bottom: 2em;
+  font-size: 1.5em;
+  text-align: center;
+  padding-top: 2em;
+  padding-bottom: 2em;
 }
 
 .summary {
+  padding: 5px;
+  margin: 5px;
 }
 
-.summary-wrapper {
-    background-color: #E5E2E0;
-    padding: 1em;
+.summary-blk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary-child {
+  width: 100%;
+  height: 234px;
+  text-align: center;
+  border: 1px solid;
+  border-radius: 2%;
+  background-color: #fff;
+  padding: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 }
 
 .summary-title {
-    padding-bottom: 1em;
-    text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.summary-wrapper {
+  /* background-color: #e5e2e0; */
+  /* padding: 1em; */
 }
 
 .summary-label {
-    font-weight: 600;
+  font-weight: 600;
+  font-size: 30px;
+  text-align: center;
 }
 
 .text-align-center {
-    text-align: center;
+  text-align: center;
 }
 
 .loss {
-    color: #BD2D28;
+  color: #bd2d28;
+}
+
+.loss-blk {
+  background-color: #bd2d28;
+  color: #fff;
 }
 
 .gain {
-    color: #0F8C79;
+  color: #0f8c79;
+}
+
+.gain-blk {
+  background-color: #0f8c79;
+  color: #fff;
 }
 
 .summary-value {
-    font-weight: 500;
+  font-weight: 500;
 }
 
-#expense_source_list {
-    margin-left: 2em;
+#expense_source_list,
+#income_source_list {
+  margin-left: 2em;
+  font-size: 12px;
+}
+
+#max-purchased-source {
+  height: 2.5em;
+  overflow-y: auto;
 }

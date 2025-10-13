@@ -1,4 +1,17 @@
 body {
-    background-color: #fff;
-    font-family: "Poppins", serif;
+  background-color: #fff;
+  font-family: "Poppins", serif;
+}
+
+.navigation {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+}
+
+.content {
+  margin-top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
 }

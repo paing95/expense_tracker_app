@@ -7,6 +7,9 @@ from .models import Income, IncomeType
 from .models import Expense, ExpenseType
 from .models import Source
 
+admin.site.site_header = "Expense Tracker Admin"
+admin.site.index_title = "Welcome to Expense Tracker System"
+
 
 @admin.register(IncomeType)
 class IncomeTypeAdmin(admin.ModelAdmin):

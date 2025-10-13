@@ -14,3 +14,6 @@ class LoginForm(forms.Form):
         ),
         required=True,
     )
+
+# 
+# class RegistrationForm(form)
