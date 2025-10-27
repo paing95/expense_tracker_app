@@ -1,4 +1,11 @@
+asgiref==3.8.1
+diff-match-patch==20241021
 Django==5.1.6
 django-admin-rangefilter==0.13.2
 django-import-export==4.3.7
+gunicorn==23.0.0
+packaging==25.0
 python-dateutil==2.9.0.post0
+six==1.17.0
+sqlparse==0.5.3
+tablib==3.8.0
